@@ -81,11 +81,17 @@ class Swipeable extends React.Component {
     }
 
     // preventDefaultTouchmoveEvent toggled off - clean up touch move if needed
-    if (prevProps.preventDefaultTouchmoveEvent && !this.props.preventDefaultTouchmoveEvent) {
+    if (
+      prevProps.preventDefaultTouchmoveEvent &&
+      !this.props.preventDefaultTouchmoveEvent
+    ) {
       this.cleanupTouchmoveEvent();
 
-    // preventDefaultTouchmoveEvent toggled on - add touch move if needed
-    } else if (!prevProps.preventDefaultTouchmoveEvent && this.props.preventDefaultTouchmoveEvent) {
+      // preventDefaultTouchmoveEvent toggled on - add touch move if needed
+    } else if (
+      !prevProps.preventDefaultTouchmoveEvent &&
+      this.props.preventDefaultTouchmoveEvent
+    ) {
       this.setupTouchmoveEvent();
     }
   }
@@ -96,7 +102,9 @@ class Swipeable extends React.Component {
 
   setupTouchmoveEvent() {
     if (this.element && this.hasPassiveSupport) {
-      this.element.addEventListener('touchmove', this.eventMove, { passive: false });
+      this.element.addEventListener('touchmove', this.eventMove, {
+        passive: false,
+      });
     }
   }
 
@@ -107,7 +115,9 @@ class Swipeable extends React.Component {
 
   cleanupTouchmoveEvent() {
     if (this.element && this.hasPassiveSupport) {
-      this.element.removeEventListener('touchmove', this.eventMove, { passive: false });
+      this.element.removeEventListener('touchmove', this.eventMove, {
+        passive: false,
+      });
     }
   }
 
@@ -156,14 +166,23 @@ class Swipeable extends React.Component {
       stopPropagation,
       delta,
       onSwiping,
-      onSwipingLeft, onSwipedLeft,
-      onSwipingRight, onSwipedRight,
-      onSwipingUp, onSwipedUp,
-      onSwipingDown, onSwipedDown,
+      onSwipingLeft,
+      onSwipedLeft,
+      onSwipingRight,
+      onSwipedRight,
+      onSwipingUp,
+      onSwipedUp,
+      onSwipingDown,
+      onSwipedDown,
       preventDefaultTouchmoveEvent,
+      onChange,
     } = this.props;
 
-    if (!this.swipeable.x || !this.swipeable.y || e.touches && e.touches.length > 1) {
+    if (
+      !this.swipeable.x ||
+      !this.swipeable.y ||
+      (e.touches && e.touches.length > 1)
+    ) {
       return;
     }
 
@@ -202,6 +221,8 @@ class Swipeable extends React.Component {
     this.swipeable.swiping = true;
 
     if (cancelablePageSwipe && preventDefaultTouchmoveEvent) e.preventDefault();
+
+    onChange(this.swipeable);
   }
 
   eventEnd(e) {
@@ -214,6 +235,7 @@ class Swipeable extends React.Component {
       onSwipedUp,
       onSwipedDown,
       onTap,
+      onChange,
     } = this.props;
 
     if (this.swipeable.swiping) {
@@ -242,6 +264,8 @@ class Swipeable extends React.Component {
 
     // finished swipe tracking, reset swipeable state
     this.swipeable = getInitialState();
+
+    onChange(this.swipeable);
   }
 
   elementRef(element) {
@@ -268,6 +292,7 @@ class Swipeable extends React.Component {
     newProps.ref = this.elementRef;
 
     // clean up swipeable's props to avoid react warning
+    delete newProps.onChange;
     delete newProps.onSwiped;
     delete newProps.onSwiping;
     delete newProps.onSwipingUp;
@@ -292,12 +317,13 @@ class Swipeable extends React.Component {
     return React.createElement(
       this.props.nodeName,
       newProps,
-      this.props.children,
+      this.props.children
     );
   }
 }
 
 Swipeable.propTypes = {
+  onChange: PropTypes.func,
   onSwiped: PropTypes.func,
   onSwiping: PropTypes.func,
   onSwipingUp: PropTypes.func,

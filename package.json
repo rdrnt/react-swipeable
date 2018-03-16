@@ -1,6 +1,6 @@
 {
   "name": "react-swipeable",
-  "version": "4.2.0",
+  "version": "4.3.0",
   "description": "Swipe bindings for react",
   "main": "lib/Swipeable.js",
   "scripts": {
@@ -61,6 +61,9 @@
   },
   "dependencies": {
     "detect-passive-events": "^1.0.4",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "prettier": "^1.11.1",
     "prop-types": "^15.5.8"
   },
   "peerDependencies": {
